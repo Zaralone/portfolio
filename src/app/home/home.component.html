@@ -1,0 +1,23 @@
+<div class="container py-5">
+  <h1 class="display-4">{{ title }}</h1>
+  <div class="card-columns">
+    <div class="col-sm-12 col-md-6 col-lg-4" *ngFor="let album of albums; let i = index">
+      <div *ngIf="album.afficher">
+        <div class="album" [routerLink]="['/album', i]" >
+          <div class="card" style="width: 18rem;" >
+            <div *ngFor="let photo of album.photos; let first = first">
+                <img [src]="photo" *ngIf="first" class="card-img-top" alt="p">
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ album.title }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{ album.category }}</h6>
+              <p class="card-text">
+                {{ album.description }} <span *ngIf="album.description && album.description !== ''"> </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

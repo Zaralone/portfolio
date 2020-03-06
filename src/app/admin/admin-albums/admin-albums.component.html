@@ -1,0 +1,122 @@
+<div class="rounded shadow bg-withe p-5">
+    <div class="row">
+      <div class="col-12 d-flex">
+        <h2 class="font-weight-light"><i class="fas fa-home"></i> Mes albums photo</h2>
+        <button class="btn btn-primary ml-auto" type="button" data-toggle="modal" data-target="#albumsFromModal" (click)="resetForm()"><i class="fas fa-plus"></i> Ajouter un album</button>
+      </div>
+    </div>
+    <hr class="mt-1 mb-5 bg-dark">
+    <button class="btn btn-primary m-1" type="button" (click)="onSortable(albums)">Enregistrer</button>
+    <div class="row" [sortablejs]="albums" >
+      <div *ngFor="let album of albums; let i = index" class="col-12 shadow-sm p-4 mb-3 bg-light" >
+        <div class="row" >
+          <div class="col-3">
+            <div *ngFor="let photo of album.photos; let first = first">
+                <img *ngIf="first" [src]="photo" alt="photo" class="w-100">
+            </div>
+          </div>
+          <div class="col-9">
+            <div class="d-flex">
+                <h3 class="font-weight-normal">{{ album.title }}</h3>
+                <div class="ml-auto">
+                  <button class="btn btn-primary m-1" type="button" (click)="onEditAlbum(album)"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-danger m-1" type="button" (click)="onDeleteAlbum(i)"><i class="fas fa-trash-alt"></i></button>
+                </div>
+              </div>
+              <p>
+                {{ album.description }} <span *ngIf="album.description && album.description !== ''"></span>
+              </p>
+              <p>
+                <span *ngIf="album.afficher" class="text-success">Affiché !</span>
+                <span *ngIf="!album.afficher" class="text-danger">Masqué</span>
+              </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="albumsFromModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <form [formGroup]="albumsForm" (ngSubmit)="onSubmitAlbumsForm()">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Edition d'un album</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <input type="text" placeholder="Titre" class="form-control" formControlName=title>
+            </div>
+            <!-- <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Catégorie</label>
+              </div>
+              <select class="custom-select" id="inputGroupSelect01" formControlName="category">
+                <option value="Appartement">Appartement</option>
+                <option value="Maison">Maison</option>
+              </select>
+            </div> -->
+            <div class="form-group">
+              <textarea class="form-control w-100" rows="4" placeholder="Description de l'album" formControlName="description"></textarea>
+            </div>
+            <div class="row" [sortablejs]="photosAdded">
+              <div *ngFor="let photo of photosAdded; let i = index" class="col-4 border border-secondary rounded m-1 p-1 bg-light position-relative">
+                <span class="text-danger position-absolute mr-1 deletePhoto" (click)="onRemoveAddedPhoto(i)">
+                  <i class="fas fa-times"></i>
+                </span>
+                <img [src]="photo" alt="photo" class="w-100">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-9">
+                <div class="input-group mb-3">
+                  <div class="custom-file">
+                    <input type="file" multiple class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" (change)="onUploadFile($event)">
+                    <label class="custom-file-label" for="inputGroupFile01">Envoyer une image</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="spinner-border text-primary" *ngIf="photoUploading" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+            </div>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="customSwitch1" formControlName="afficher">
+              <label class="custom-control-label" for="customSwitch1">
+                <span class="text-success" *ngIf="albumsForm.value.afficher">Afficher</span>
+                <span class="text-danger"*ngIf="!albumsForm.value.afficher">Masquer</span>
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+            <button type="button" class="btn btn-primary" type="submit" [disabled]="albumsForm.invalid">Enregister</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal delete album -->
+  <div class="modal fade" id="deleteAlbumModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle">Suprimer cet album ?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-danger" (click)="onConfirmDeleteAlbum()">Supprimer</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,16 @@
+<div class="container py-5">
+  <h1 class="display-4">{{ profil.prenom }} {{ profil.nom }}</h1>
+  <div class="row mt-5">
+    <div class="col-3">
+      <img [src]="profil.photo" alt="photo" class="w-100">
+    </div>
+    <div class="col-9">
+      <h2>Equipement</h2>
+      <hr class="bg-light mb-4 mt-2">
+      <p class="col-md-12">{{ profil.equipement }}</p>
+      <h2>Mon parcours</h2>
+      <hr class="bg-light mb-4 mt-2">
+      <p>{{ profil.parcours }}</p>
+    </div>
+  </div>
+</div>
